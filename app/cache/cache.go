@@ -2,24 +2,24 @@ package cache
 
 import (
 	"github.com/gadelkareem/cachita"
+	"github.com/koushamad/goro-app/app/helper"
 	"github.com/koushamad/goro-core/app/conf"
 	"github.com/koushamad/goro-core/app/exception/throw"
-	"github.com/koushamad/goro-core/app/helper"
 	"sync"
 	"time"
 )
 
 var (
 	cache cachita.Cache
-	once sync.Once
-	)
+	once  sync.Once
+)
 
 func Boot() {
 	once.Do(func() {
 		var err error
 		var driver = conf.Get("cache.driver")
 		switch driver {
-		case "file" :
+		case "file":
 			cache, err = cachita.NewFileCache(helper.CachePath(), 0, 0)
 			throw.Fatal("Cache file driver error", 101, err)
 			break
@@ -42,8 +42,8 @@ func Get(key string, i interface{}) {
 	throw.Fatal("Cannot get cash", 103, err)
 }
 
-func Put(key string, i interface{}, ttl time.Duration){
-	err := cache.Put(key, i, ttl*time.Minute);
+func Put(key string, i interface{}, ttl time.Duration) {
+	err := cache.Put(key, i, ttl*time.Minute)
 	throw.Fatal("Cannot put cash", 104, err)
 }
 
@@ -55,6 +55,5 @@ func Incr(key string, ttl time.Duration) int64 {
 
 func Invalidate(key string) {
 	err := cache.Invalidate(key)
-	throw.Fatal("Cannot invalidate cash",106, err)
+	throw.Fatal("Cannot invalidate cash", 106, err)
 }
-
